@@ -1,0 +1,9 @@
+Eu tive o mesmo problema (= mensagem de erro). Confira no topo do software demo as seguintes falas:
+
+# If modifying these scopes, delete the file token.pickle.
+SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
+e modificar para
+
+# If modifying these scopes, delete the file token.pickle.
+SCOPES = ['https://www.googleapis.com/auth/calendar']
+em seguida, exclua seu arquivo token.pickle e execute novamente seu script.
