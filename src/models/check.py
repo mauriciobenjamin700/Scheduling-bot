@@ -1,6 +1,6 @@
 import datetime
+from json import dump
 from os.path import exists
-import json
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -11,12 +11,16 @@ from googleapiclient.errors import HttpError
 """
 Constante SCOPES, que é uma lista de escopos de acesso à API do Google Calendar. Neste caso, é apenas leitura (calendar.readonly), o que significa que o script só pode ler os eventos do calendário, sem modificar nada.
 """
-SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
+
 
 def get_events(num_events:int=10):
+    """"""
     """
     Busca os N eventos solicitados no calendario
     """
+    
+    SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
+    
     creds = None
     """
     Verifica se o arquivo token.json existe no diretório atual. 
@@ -70,15 +74,15 @@ def get_events(num_events:int=10):
         
         cronograma = []
         
-        events2json(events)
+        #events2json(events)
     
         if events:
             #print(events) //events é uma lista de dicionários
             for event in events:
-                process_events(event)
+                cronograma.append(process_event(event))
                 #Para cada evento encontrado, obtém a data e hora de início (se disponível) ou apenas a data, e imprime a data/hora de início e o resumo do evento.
-                start = event["start"].get("dateTime", event["start"].get("date"))
-                cronograma.append([start, event["summary"]])
+                #start = event["start"].get("dateTime", event["start"].get("date"))
+                #cronograma.append([start, event["summary"]])
 
     except HttpError as error:
         print(f"An error occurred: {error}")
@@ -89,7 +93,7 @@ def get_events(num_events:int=10):
     return cronograma
 
 
-def process_events(event):
+def process_event(event):
     start_datetime = event["start"].get("dateTime", None)
     if start_datetime:
         event_date = start_datetime.split("T")[0]
@@ -105,19 +109,23 @@ def process_events(event):
     event_title = event.get("summary", "Título não especificado")
     event_description = event.get("description", "Descrição não especificada")
 
-    # Imprimir as informações coletadas
+    #Imprimir as informações coletadas
+    """
     print("Data do evento:", event_date)
     print("Hora do evento:", event_time)
     print("Participantes:", ", ".join(attendees))
     print("Título do evento:", event_title)
     print("Descrição do evento:", event_description)
     print("-" * 50)
+    """
+    return {"data": event_date,"hora":event_time,"membros":attendees,"evento":event_title,"detalhes":event_description}
+    
         
         
 def events2json(events, json_name:str='events.json'):
     
     with open(json_name,'w') as json_file:
-        json.dump(events,json_file,indent=4)
+        dump(events,json_file,indent=4)
 
 
 if __name__ == "__main__":
