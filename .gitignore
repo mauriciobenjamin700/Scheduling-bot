@@ -1,5 +1,6 @@
 #pastas
 venv
+tmp
 
 #arquivos
 token.json
