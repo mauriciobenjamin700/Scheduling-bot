@@ -1,7 +1,7 @@
 from googleapiclient.discovery import build
 from google.oauth2.credentials import Credentials
 
-def adicionar_evento(token_path, evento):
+def event2calender(token_path, evento):
     # Carrega as credenciais do usuário
     creds = Credentials.from_authorized_user_file(token_path)
 
@@ -27,5 +27,5 @@ if __name__ == "__main__":
 
 
     # Adiciona o evento ao Google Calendar
-    adicionar_evento(token_path, evento)
+    event2calender(token_path, evento)
     print("TERMINEI")
