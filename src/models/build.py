@@ -104,7 +104,7 @@ def Recurrence(start_date: str, end_date: str, freq: str = 'None'):
     return recurrence
 
 
-def Data(data_br:str="28/02/2024 14:07:00"):
+def DataTime(data_br:str="28/02/2024 14:07:00"):
     from datetime import datetime, timedelta
 
     # Defina sua data e hora no formato brasileiro
@@ -120,11 +120,19 @@ def Data(data_br:str="28/02/2024 14:07:00"):
     data_google = data_obj.strftime("%Y-%m-%dT%H:%M:%S-03:00")
 
     return data_google
+
+def Data(data_br:str="28/02/2024"):
+    from datetime import datetime
+    return datetime.strptime(data_br,"%d/%m/%Y").strftime("%Y-%m-%d")
+    
     
     
 
-def Attendees(email_list:list):
+def Attendees(email_str_csv:str):
     attendees = []
+    
+    email_list = email_str_csv.split(",")
+    print(email_list)
     
     for email in email_list:
         dic = {"email": email}
@@ -138,4 +146,7 @@ def Attendees(email_list:list):
 
 
 if __name__ == "__main__":
-    print(Recurrence("2024-02-28","2024-02-29","None"))
+    print(Recurrence(Data("28/02/2024"),Data("28/02/2024")))
+    
+    
+    #print(Recurrence("2024-02-28","2024-02-29","None"))

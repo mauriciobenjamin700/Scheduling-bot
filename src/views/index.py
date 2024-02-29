@@ -6,7 +6,7 @@ from  os.path import dirname,abspath
 current_dir = dirname(dirname(abspath(__file__)))
 sys.path.append(current_dir)
 from models.add import event2calender
-from models.build import Event,Recurrence,Data,Attendees
+from models.build import Event,Recurrence,Data,DataTime,Attendees
 
 
 class Home(tk.Tk):
@@ -22,33 +22,33 @@ class Home(tk.Tk):
         dados = [self.entry1.get(), self.entry2.get(), self.entry3.get(), self.entry4.get(), self.entry5.get(), self.entry6.get(),self.entry7.get()]
         #print("Dados enviados:", dados)
         if '' in dados:
-            messagebox.showerror("Erro", "Por favor, preencha todos os campos.")
-            
+            messagebox.showwarning("Erro", "Por favor, preencha todos os campos.")
+        
         else:
-            resposta = messagebox.askyesno("Confirmação", "Deseja realmente enviar os dados?")
-            if resposta:
-                print("Dados enviados:", dados)
-        
-        try:
-            summary = dados[0]
-            location = dados[1]
-            description = dados[6]
             
-            br_data = dados[2] + " " + dados[3] + ":00"
-            
-            start_dateTime = Data(br_data)
-            
-            br_data = dados[2] + " " + dados[4] + ":00"
-            
-            end_dateTime = Data(br_data)
-            attendees = Attendees(dados[5])
-            
-            event = Event(summary,location,description,start_dateTime,end_dateTime=end_dateTime,recurence=[],attendees=attendees)
-            
-            print(event)
-        
-        except:
-            print("Compos com dados invalidos")
+            try:
+                summary = dados[0]
+                location = dados[1]
+                description = dados[6]
+                br_data = dados[2] + " " + dados[3] + ":00"
+                start_dateTime = DataTime(br_data)
+                br_data = dados[2] + " " + dados[4] + ":00"
+                end_dateTime = DataTime(br_data)
+                attendees = Attendees(dados[5])
+                recurrence = Recurrence(Data(dados[2]),Data(dados[2]))
+                
+                print([summary,location,description,start_dateTime,end_dateTime,attendees,recurrence])
+                
+                event = Event(summary,location,description,start_dateTime,end_dateTime=end_dateTime,recurence=recurrence,attendees=attendees)
+                resposta = messagebox.askyesno("Confirmação", "Deseja realmente enviar os dados?")
+                
+                if resposta:
+                    print("Dados enviados:", dados)
+                    event2calender(token_path="token.json",evento=event)
+                    messagebox.showinfo("Sucesso", "Cadastrado com sucesso!")
+              
+            except:
+                messagebox.showerror("Erro", "Por favor, preencha todos os campos corretamente.")
         
 
     def criar_interface(self):
@@ -98,3 +98,4 @@ if __name__ == "__main__":
     # Exemplo de uso
     tela = Home()
     tela.mainloop()
+#leviathantempest70@gmail.com
